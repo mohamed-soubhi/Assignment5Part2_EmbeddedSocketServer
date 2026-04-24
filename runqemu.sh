@@ -1,9 +1,13 @@
 #!/bin/bash
 #Script to run QEMU for buildroot as the default configuration qemu_aarch64_virt_defconfig
-#Host forwarding: Host Port 10022 ->> QEMU Port 22 
+#Host forwarding: Host Port 10022 ->> QEMU Port 22
+#               Host Port 9000  ->> QEMU Port 9000
 #Author: Siddhant Jajoo.
 
+echo "Checking images exist..."
+ls -la buildroot/output/images/ 2>&1
 
+echo "Starting qemu-system-aarch64..."
 qemu-system-aarch64 \
     -M virt  \
     -cpu cortex-a53 -nographic -smp 1 \
@@ -13,3 +17,4 @@ qemu-system-aarch64 \
     -device virtio-net-device,netdev=eth0 \
     -drive file=buildroot/output/images/rootfs.ext4,if=none,format=raw,id=hd0 \
     -device virtio-blk-device,drive=hd0 -device virtio-rng-pci
+echo "QEMU exited with code $?"
